@@ -12,11 +12,11 @@
 /** The movies the runtime plays (RCK1.exe's start movie only does `go(1, "MAIN")`). */
 export const MOVIES = ['MAIN', 'INTRO', 'MENU', 'GM01', 'GM02', 'GM03', 'GM04', 'GM05'];
 
-/** Files the game reads: the movies, DREF.ini, voice.cpd lists, all WAVs and the logo video. The
- * projector, Xtras and installers are not needed. */
+/** Files the game reads: the movies, DREF.ini, voice.cpd lists, all WAVs and the logo video, and
+ * the projector RCK1.exe for its icon only (import/icon.ts). The Xtras and installers are not needed. */
 export function isGameFile(key        )          {
   if (/\.(wav|cpd|ini)$/.test(key)) return true;
-  if (key === 'local/dxs3.avi') return true;
+  if (key === 'local/dxs3.avi' || key === 'local/rck1.exe') return true;
   return MOVIES.some((m) => key === 'local/' + m.toLowerCase() + '.dxr');
 }
 

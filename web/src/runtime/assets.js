@@ -43,7 +43,8 @@ export const PRELOAD                           = {
 export class Assets {
            cd          ;
   /** Normalised path -> original spelling of the files `getNthFileNameInFolder` and the Xtras see
-   * (the movies are opened by the player, not listed). */
+   * (the movies are opened by the player, RCK1.exe only gives the page its icon: not listed, as
+   * before the import kept it). */
            files = new Map                ();
           audio = new Map                     ();
           text = new Map                ();
@@ -53,7 +54,7 @@ export class Assets {
   constructor(cd          , audioCtx                     ) {
     this.cd = cd;
     this.audioCtx = audioCtx;
-    for (const [k, n] of cd.names) if (!k.endsWith('.dxr')) this.files.set(k, n);
+    for (const [k, n] of cd.names) if (!/\.(dxr|exe)$/.test(k)) this.files.set(k, n);
   }
 
   /** A movie's cast, score, palettes and images, converted from `LOCAL/<name>.dxr`. */

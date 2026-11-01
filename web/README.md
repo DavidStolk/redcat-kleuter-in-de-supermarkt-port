@@ -42,9 +42,10 @@ which ones are missing.
 | `LOCAL/Data2/*.wav` | Music and the voices of the introduction |
 | `DATA/DREF.ini` | The CD check |
 | `DATA/Fe_00/` … `DATA/FE_05/` | Speech and sounds of the menu and the five games, with a `voice.cpd` in each |
+| `LOCAL/RCK1.exe` | Only for its icon (optional): the page uses the game's own icon |
 
-The rest of the CD is not needed (`RCK1.exe`, `XTRAS`, `setup.exe`, `Autorun`, `LEESMIJ`,
-`dxsetup`, `Helpdesk`).
+The rest of the CD is not needed (`XTRAS`, `setup.exe`, `Autorun`, `LEESMIJ`, `dxsetup`,
+`Helpdesk`).
 
 ## Running it
 
@@ -78,9 +79,11 @@ and opens the game in your default browser. Nothing needs to be installed.
 A tablet can't run the starters, so the page has to be online. This repository publishes the
 `web` folder on GitHub Pages by itself (`.github/workflows/pages.yml`). In a fork, turn it on once
 under **Settings → Pages → Source: GitHub Actions**. Any other static web host works too: upload
-the contents of this folder and use HTTPS. On
-an iPad, **Share → Add to Home Screen** then opens the game full screen in landscape. It also
-keeps Safari from clearing the stored game files when the site hasn't been used for a few weeks.
+the contents of this folder and use HTTPS. On an iPad, **Share → Add to Home Screen** then opens
+the game full screen in landscape. Do this after choosing the game files: the home-screen icon is
+then the game's own icon, taken from `RCK1.exe` on your CD (before that, a plain shopping cart).
+It also keeps Safari from clearing the stored game files when the site hasn't been used for a
+few weeks.
 
 The browser keeps the game files per address. Each address (for example `127.0.0.1:8140` versus
 `127.0.0.1:8141`, or an online copy) asks for the CD once.
