@@ -72,18 +72,6 @@ and opens the game in your default browser. Nothing needs to be installed.
 
     Then open <http://127.0.0.1:8140/>.
 
-### Online, for tablets
-
-A tablet can't run the starters, so the page has to be online. This repository publishes the
-`web` folder on GitHub Pages by itself (`.github/workflows/pages.yml`). In a fork, turn it on once
-under **Settings → Pages → Source: GitHub Actions**. Any other static web host works too: upload
-the contents of this folder and use HTTPS. On an iPad, **Share → Add to Home Screen** then opens
-the game full screen in landscape, with the game's own Redcat icon. It also keeps Safari from
-clearing the stored game files when the site hasn't been used for a few weeks.
-
-The browser keeps the game files per address. Each address (for example `127.0.0.1:8140` versus
-`127.0.0.1:8141`, or an online copy) asks for the CD once.
-
 ### Browsers
 
 A current Chrome, Edge, Firefox or Safari, on a computer or a tablet (iPadOS 16.4 or newer). Play
