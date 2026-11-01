@@ -8,7 +8,7 @@ exit /b
 #POWERSHELL
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetDirectoryName($env:RCK_BAT).TrimEnd('\') + '\'
-$types = @{ '.html' = 'text/html; charset=utf-8'; '.js' = 'text/javascript'; '.webmanifest' = 'application/manifest+json'; '.json' = 'application/json'; '.png' = 'image/png'; '.svg' = 'image/svg+xml' }
+$types = @{ '.html' = 'text/html; charset=utf-8'; '.js' = 'text/javascript'; '.webmanifest' = 'application/manifest+json'; '.json' = 'application/json'; '.png' = 'image/png'; '.svg' = 'image/svg+xml'; '.ico' = 'image/x-icon' }
 $port = 8140
 while ($true) {
   $http = New-Object System.Net.HttpListener

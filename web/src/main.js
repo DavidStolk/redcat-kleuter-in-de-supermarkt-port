@@ -5,7 +5,6 @@ import { setRandomSeed } from './runtime/lingo.js';
 import { Player } from './runtime/player.js';
 import { MOVIE_SCRIPTS } from './movies/index.js';
 import { readDebugParams } from './debug.js';
-import { exeIcon, useGameIcon } from './import/icon.js';
 import { askForFiles } from './import/picker.js';
 import { fromUrl } from './import/sources.js';
 import { clearStored, openStored } from './import/store.js';
@@ -40,10 +39,6 @@ async function boot()                {
   if (!cd) cd = await askForFiles(overlay);
   overlay.textContent = 'Laden...';
   const assets = new Assets(cd, audioCtx);
-  // The game's own Windows icon (RCK1.exe, Redcat's head) as the home-screen and tab icon.
-  if (cd.names.has('local/rck1.exe')) {
-    void cd.read('local/rck1.exe').then((b) => { const img = exeIcon(b); if (img) useGameIcon(img); }).catch(() => {});
-  }
   const player = new Player(app, assets, MOVIE_SCRIPTS, audioCtx);
   bindPlayer(player);
 
