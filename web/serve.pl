@@ -13,7 +13,7 @@ my $root = abs_path(dirname(__FILE__));
 my %types = (
 	html => 'text/html; charset=utf-8', js => 'text/javascript', webmanifest => 'application/manifest+json',
 	css => 'text/css', json => 'application/json', md => 'text/plain; charset=utf-8',
-	txt => 'text/plain; charset=utf-8', png => 'image/png', ico => 'image/x-icon',
+	txt => 'text/plain; charset=utf-8', png => 'image/png', ico => 'image/x-icon', svg => 'image/svg+xml',
 );
 
 # the first free port from 8140

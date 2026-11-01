@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Home-screen icon (own drawing, no game artwork): a cat in a shopping cart. Full-bleed square:
+       iOS and Android round the corners themselves. PNGs: tools/make_icons.mjs. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ec3b3f"/>
+      <stop offset="1" stop-color="#b81d25"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <!-- cat head, behind the basket's front -->
+  <g stroke="#3a1a0a" stroke-width="22" stroke-linejoin="round">
+    <path d="M330 470 L345 245 L470 345 Z" fill="#f28c28"/>
+    <path d="M694 470 L679 245 L554 345 Z" fill="#f28c28"/>
+    <ellipse cx="512" cy="470" rx="215" ry="175" fill="#f28c28"/>
+  </g>
+  <path d="M362 300 L372 400 L430 352 Z" fill="#ffd9b0"/>
+  <path d="M662 300 L652 400 L594 352 Z" fill="#ffd9b0"/>
+  <ellipse cx="512" cy="530" rx="120" ry="80" fill="#fff3e3"/>
+  <!-- eyes, nose, mouth -->
+  <ellipse cx="437" cy="440" rx="34" ry="44" fill="#fff"/>
+  <ellipse cx="587" cy="440" rx="34" ry="44" fill="#fff"/>
+  <circle cx="445" cy="450" r="19" fill="#2a160a"/>
+  <circle cx="579" cy="450" r="19" fill="#2a160a"/>
+  <path d="M492 505 Q512 495 532 505 Q512 532 492 505 Z" fill="#e0455a" stroke="#3a1a0a" stroke-width="8"/>
+  <path d="M512 522 Q512 552 480 556 M512 522 Q512 552 544 556" fill="none" stroke="#3a1a0a" stroke-width="10" stroke-linecap="round"/>
+  <path d="M400 520 L310 505 M400 540 L312 548 M624 520 L714 505 M624 540 L712 548" stroke="#3a1a0a" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- shopping cart -->
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M110 330 L215 330 L275 600" stroke-width="44"/>
+    <path d="M232 560 L820 560 L770 760 L300 760 Z" fill="#ffffff" stroke-width="40"/>
+    <path d="M300 760 L285 840 L790 840" stroke-width="40"/>
+  </g>
+  <g stroke="#e3e3e3" stroke-width="16" stroke-linecap="round">
+    <path d="M380 600 L392 720 M500 600 L500 720 M620 600 L608 720 M720 600 L700 720"/>
+    <path d="M265 660 L790 660"/>
+  </g>
+  <g fill="#3b3b3b" stroke="#ffffff" stroke-width="20">
+    <circle cx="350" cy="895" r="48"/>
+    <circle cx="720" cy="895" r="48"/>
+  </g>
+</svg>
