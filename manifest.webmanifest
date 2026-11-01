@@ -1,0 +1,11 @@
+{
+  "name": "Redcat Kleuter 1",
+  "short_name": "Redcat",
+  "lang": "nl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}
