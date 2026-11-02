@@ -36,7 +36,7 @@ export class Member {
   /** Current reg point relative to the image's top-left (`the regPoint` can be set). */
   regH        ; regV        ;
   /** Decoded image (bitmap or text RTE2 rendering), set by the loader. */
-  image                                        = null;
+  image                                                            = null;
   /** Digital video: `the duration of member` in ticks (from the original AVI, import/video.ts). */
   duration = 0;
   constructor(movie       , d            ) {

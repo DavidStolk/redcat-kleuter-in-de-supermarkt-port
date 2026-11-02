@@ -11,6 +11,16 @@ import { Stage, STAGE_H, STAGE_W,                 } from './stage.js';
 import { DirectOS } from './xtras.js';
 import { INK_MATTE,          } from './ink.js';
 
+/** A text member's RTE2 rendering (anti-aliased, the only images with partial alpha) as a canvas
+ * filled with putImageData. iOS WebKit (Safari and Chrome on iPad) loses the alpha of
+ * `createImageBitmap(ImageData, { premultiplyAlpha: 'none' })`: the text showed as opaque boxes. */
+function textImage(img           )                    {
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, img.w); c.height = Math.max(1, img.h);
+  c.getContext('2d') .putImageData(new ImageData(img.rgba, img.w, img.h), 0, 0);
+  return c;
+}
+
 /** The game's own hand cursor: channel 119 in every movie that has one (Class_Cursor `new`,
  * e.g. GM05.dxr #18: `pSprite = 119`; the frame scripts move it to `the mouseH/V` in `idle`). */
 const CURSOR_CHANNEL = 119;
@@ -306,7 +316,8 @@ export class Player {
     for (const m of movie.members.values()) {
       const file = m.type === 'bitmap' ? m.data.file : m.type === 'text' ? m.data.rte2?.file : null;
       const img = file ? conv.images.get(file) : undefined;
-      if (img) loads.push(this.loadImage(img).then((b) => { m.image = b; }));
+      if (img && m.type === 'text') m.image = textImage(img);
+      else if (img) loads.push(this.loadImage(img).then((b) => { m.image = b; }));
       if (m.type === 'digitalVideo') {
         loads.push(this.assets.video(PATH_NAME + (m.data.filename ?? '')).then((clip) => {
           if (clip) { this.clips.set(m, clip); m.duration = clip.durationTicks; }
