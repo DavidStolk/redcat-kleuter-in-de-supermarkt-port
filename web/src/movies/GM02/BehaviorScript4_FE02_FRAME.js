@@ -8,6 +8,7 @@ import {
   length, listp, lt, max, min, neq, random, setAt, setaProp, string, sym, truthy, value, VOID, voidp,            
 } from '../../runtime/lingo.js';
 import { LingoScript } from '../../runtime/scripts.js';
+import { cutIntroTalk, requestSkipIntro } from '../skipIntro.js';
 
 // Frame script of the game frame (frame 3): word-spelling game ("Fles" = bottle with a letter,
 // "LB" = LetterBak with the word, "BC" = Bakker/character that speaks the word, "FC" = the two
@@ -197,8 +198,15 @@ export class FE02_FRAME extends LingoScript {
     }
   }
 
+  // Port only (DEVIATIONS.md "Skipping Redcat's intro"): sent by the player on every mouse
+  // press, before mouseDown (port/src/movies/skipIntro.ts).
+  skipIntro()        {
+    requestSkipIntro(this);
+  }
+
   // GM02.dxr #4 on exitFrame me
   exitFrame()        {
+    cutIntroTalk(this); // port only: skipIntro
     if (eq(this.pTalkFile_Flag, 1)) {
       this.pTalkFile_Flag = 0;
       dsPlay(this.pTalkFile);

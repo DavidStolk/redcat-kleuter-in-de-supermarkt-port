@@ -174,18 +174,21 @@ function decodeRte2(d       , fg          )                                     
   const rgba = new Uint8ClampedArray(w * h * 4);
   let i = 6, o = 0, [r, g, b] = fg;
   const push = (a        ) => { if (o < rgba.length) { rgba[o] = r; rgba[o + 1] = g; rgba[o + 2] = b; rgba[o + 3] = a; } o += 4; };
+  // Every row ends with `0 0`, also a row whose pixels reach the full width (checked on all 12
+  // text members: each decodes to exactly the chunk's length).
   for (let y = 0; y < h; y++) {
-    let x = 0;
-    while (x < w) {
+    const end = o + w * 4;
+    for (;;) {
       const c = d[i++];
       if (c === 0x1f) { r = d[i]; g = d[i + 1]; b = d[i + 2]; i += 3; continue; }
       const a = Math.floor((c * 255) / cmax);
       if (c === 0 || c === cmax) {
         const n = d[i++];
-        if (n === 0 && c === 0) { for (; x < w; x++) push(0); break; }
-        for (let k = 0; k < n; k++) { push(a); x++; if (x >= w) break; }
-      } else { push(a); x++; }
+        if (n === 0 && c === 0) break;
+        for (let k = 0; k < n; k++) if (o < end) push(a);
+      } else if (o < end) push(a);
     }
+    while (o < end) push(0);
   }
   return { w, h, bpp, rgba };
 }

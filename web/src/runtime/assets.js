@@ -40,6 +40,15 @@ export const PRELOAD                           = {
   GM05: ['local/data2/music_g5.wav', 'data/fe_05/', 'data/fe_01/audio/sndfx/'],
 };
 
+/** Files the original CD lacks, decoded from an identical file elsewhere on the CD
+ * (DEVIATIONS.md "GM05: Redcat's missing word recordings"). GM05's voice.cpd lists Redcat's word
+ * recordings `WL\05RC<word><A|B>.wav`, but the CD has only 21 of the 308 (the original stays
+ * silent while Redcat's mouth moves). GM02 has all 308 as `02RC...`: each of GM05's 637 word files
+ * that does exist is byte-identical to its GM02 twin, and all 924 cue lists are the same. */
+const STAND_INS                                                                                 = {
+  GM05: [{ source: /^data\/fe_02\/audio\/voicem\/wl\/02rc(\d{3}[ab])\.wav$/, missing: (m) => `data/fe_05/audio/voice/wl/05rc${m[1]}.wav` }],
+};
+
 export class Assets {
            cd          ;
   /** Normalised path -> original spelling of the files `getNthFileNameInFolder` and the Xtras see
@@ -82,6 +91,14 @@ export class Assets {
   async preload(movie        , onProgress                                        )                {
     const prefixes = PRELOAD[movie] ?? [];
     const wanted = [...this.files.keys()].filter((k) => prefixes.some((p) => k === p || (p.endsWith('/') && k.startsWith(p))));
+    const standIns = new Map                (); // missing file -> the file decoded in its place
+    for (const si of STAND_INS[movie] ?? []) {
+      for (const k of this.files.keys()) {
+        const m = si.source.exec(k);
+        if (m && !this.files.has(si.missing(m))) standIns.set(si.missing(m), k);
+      }
+    }
+    wanted.push(...standIns.keys());
     const want = new Set(wanted);
     for (const k of this.audio.keys()) if (!want.has(k)) this.audio.delete(k);
     for (const k of this.text.keys()) if (!want.has(k)) this.text.delete(k);
@@ -89,7 +106,7 @@ export class Assets {
     const todo = wanted.filter((k) => (k.endsWith('.wav') && !this.audio.has(k)) || (isText(k) && !this.text.has(k)));
     let done = 0;
     const work = async (k        )                => {
-      const buf = await this.cd.read(k);
+      const buf = await this.cd.read(standIns.get(k) ?? k);
       if (isText(k)) this.text.set(k, new TextDecoder('windows-1252').decode(buf));
       else if (this.audioCtx) this.audio.set(k, await this.audioCtx.decodeAudioData(buf));
       onProgress?.(++done, todo.length);

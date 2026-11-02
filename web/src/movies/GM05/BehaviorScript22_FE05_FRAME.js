@@ -8,6 +8,7 @@ import {
   min, neq, numToChar, random, setAt, setaProp, sym, symbol, truthy, value, VOID, voidp,            
 } from '../../runtime/lingo.js';
 import { LingoScript } from '../../runtime/scripts.js';
+import { cutIntroTalk, requestSkipIntro } from '../skipIntro.js';
 
 // Globals gAppSettings is `G.gAppSettings`. `get(pRIU, ...)` is sent to the RandomIndexUnit
 // instance (`call(sym('get'), pRIU, ...)`); `add(pRIU, ...)` dispatches to its `add` handler.
@@ -200,8 +201,15 @@ export class FE05_FRAME extends LingoScript {
     }
   }
 
+  // Port only (DEVIATIONS.md "Skipping Redcat's intro"): sent by the player on every mouse
+  // press, before mouseDown (port/src/movies/skipIntro.ts).
+  skipIntro()        {
+    requestSkipIntro(this);
+  }
+
   // GM05.dxr #22 on exitFrame me
   exitFrame()        {
+    cutIntroTalk(this); // port only: skipIntro
     if (eq(this.pTalkFile_Flag, 1)) {
       this.pTalkFile_Flag = 0;
       dsPlay(this.pTalkFile);

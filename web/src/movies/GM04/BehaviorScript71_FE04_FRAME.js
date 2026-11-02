@@ -2,6 +2,7 @@
 import { abort, alert, call, dsClose, dsDelSound, dsNewSound, dsOpen, dsPlay, dsSetLoop, dsSetVolume, G, go, member, movieCall, newObject, script, sendSprite, SetCursorPos, sprite, the, updateStage } from '../../runtime/api.js';
 import { add, cat, count, deleteOne, duplicate, eq, getAt, getaProp, getPos, gt, integer, listp, lt, max, min, neq, propList, random, setaProp, sym, symbol, truthy, value, VOID, voidp,            } from '../../runtime/lingo.js';
 import { LingoScript } from '../../runtime/scripts.js';
+import { cutIntroTalk, requestSkipIntro } from '../skipIntro.js';
 
 // Game frame: state machine (pFS = frame state, pFH = frame hold, pNextFS = state after the
 // current event is done) plus the voice cue player (CP_*). `get(pRIU, ...)`/`add(pRIU, ...)` are
@@ -161,8 +162,15 @@ export class FE04_FRAME extends LingoScript {
     }
   }
 
+  // Port only (DEVIATIONS.md "Skipping Redcat's intro"): sent by the player on every mouse
+  // press, before mouseDown (port/src/movies/skipIntro.ts).
+  skipIntro()        {
+    requestSkipIntro(this);
+  }
+
   // GM04.dxr #71 on exitFrame me
   exitFrame()        {
+    cutIntroTalk(this); // port only: skipIntro
     if (eq(this.pTalkFile_Flag, 1)) {
       this.pTalkFile_Flag = 0;
       dsPlay(this.pTalkFile);

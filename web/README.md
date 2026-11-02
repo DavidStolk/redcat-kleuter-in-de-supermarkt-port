@@ -76,7 +76,12 @@ and opens the game in your default browser. Nothing needs to be installed.
 
 A current Chrome, Edge, Firefox or Safari, on a computer or a tablet (iPadOS 16.4 or newer). Play
 with the mouse or with a finger, as on the original's PC. With a mouse, the first click keeps the
-pointer inside the game, like the original did; Esc releases it.
+pointer inside the game, like the original did; Esc or switching to another window releases it,
+and a click anywhere on the page catches it again. With a finger, the game's hand cursor is not
+shown, so it doesn't cover what was just tapped.
+
+A click or tap skips Redcat's explanation at the start of the menu and of each game; it plays
+again the next time.
 
 ## Troubleshooting
 

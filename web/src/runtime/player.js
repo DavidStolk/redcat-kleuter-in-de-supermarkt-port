@@ -11,6 +11,10 @@ import { Stage, STAGE_H, STAGE_W,                 } from './stage.js';
 import { DirectOS } from './xtras.js';
 import { INK_MATTE,          } from './ink.js';
 
+/** The game's own hand cursor: channel 119 in every movie that has one (Class_Cursor `new`,
+ * e.g. GM05.dxr #18: `pSprite = 119`; the frame scripts move it to `the mouseH/V` in `idle`). */
+const CURSOR_CHANNEL = 119;
+
                                                                          
 
 /** One sprite channel (`sprite n`). Lingo-set properties last until the span ends (D6). */
@@ -109,6 +113,8 @@ export class Player {
   /** The emulated OS mouse pointer while the pointer is locked (screen = stage, 640x480). */
           pointerX = STAGE_W / 2;         pointerY = STAGE_H / 2;
           locked = false;
+  /** The last pointer was a finger: the hand cursor is not drawn (DEVIATIONS.md "Touch screens"). */
+          touchInput = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
           hovered = 0;
           downTarget = 0;
   /** Ticks since the last press, until an idle event has run with the button down (see tick). */
@@ -400,6 +406,7 @@ export class Player {
       const c = this.channels[ch];
       const m = c.member;
       if (!m || m.type === 'digitalVideo') continue;
+      if (ch === CURSOR_CHANNEL && this.touchInput) continue;
       list.push({ member: m, locH: c.locH, locV: c.locV, ink: c.ink, fore: c.fore, back: c.back });
     }
     const v = this.video;
@@ -468,6 +475,7 @@ export class Player {
     const cv = this.stage.canvas;
     cv.style.touchAction = 'none';
     const push = (type                    , e              )       => {
+      this.touchInput = e.pointerType === 'touch';
       if (this.locked && e.pointerType === 'mouse') { this.input.push({ type, x: Math.round(this.pointerX), y: Math.round(this.pointerY) }); return; }
       // Absolute position, clipped to the screen: the original's OS pointer cannot leave the
       // 640x480 screen (= the stage), so neither can `the mouseH/V`.
@@ -481,10 +489,17 @@ export class Player {
     cv.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       if (e.button !== 0 || !e.isPrimary) return;
-      if (e.pointerType === 'mouse' && !this.locked) this.lockPointer(e.clientX, e.clientY);
-      else if (!this.locked) cv.setPointerCapture(e.pointerId);
+      if (e.pointerType !== 'mouse' && !this.locked) cv.setPointerCapture(e.pointerId);
       pressed = true;
       push('move', e); push('down', e);
+    });
+    // A mouse press anywhere on the page locks the mouse again once the browser has released it
+    // (Esc, another window): on the stage or on the black border around it. Not on the overlay
+    // (start click: main.ts; the black page after quit).
+    window.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0 || this.locked || this.stopped) return;
+      if (e.target instanceof Node && document.getElementById('overlay')?.contains(e.target)) return;
+      this.lockPointer(e.clientX, e.clientY);
     });
     window.addEventListener('pointermove', (e) => {
       if (!e.isPrimary) return;
@@ -529,6 +544,8 @@ export class Player {
       this.ticksSinceDown = 0;
       this.updateHover();
       this.downTarget = this.mouseTarget(e.x, e.y);
+      // Port only: a press may skip Redcat's talking intro (port/src/movies/skipIntro.ts).
+      this.event(() => { this.sendToSprite(this.channels[0], 'skipIntro', []); });
       this.event(() => this.mouseEvent('mouseDown', this.downTarget));
       return;
     }
